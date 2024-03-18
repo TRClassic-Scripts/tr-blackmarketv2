@@ -33,7 +33,7 @@ end)
             exports['qb-target']:AddEntityZone('TRPed'..TRClassicBlackMarketPed, TRClassicBlackMarketPed, {
                 name = 'TRPed'..TRClassicBlackMarketPed,
                 heading = GetEntityHeading(TRClassicBlackMarketPed),
-                debugPoly = true,
+                debugPoly = false,
             }, {
                 options = {
                     {   
