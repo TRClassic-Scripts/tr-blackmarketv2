@@ -1,4 +1,6 @@
+local QBCore = exports['qb-core']:GetCoreObject()
 local TRClassicBlackMarketPed
+local itemCheck = Config.ItemCheck
 -- Target and ped model
 
 --Blips
@@ -30,26 +32,42 @@ end)
                 SetBlockingOfNonTemporaryEvents(TRClassicBlackMarketPed, true)
                 TaskStartScenarioInPlace(TRClassicBlackMarketPed, v.scenario, 0, true)
 --Targeting Export
-            exports['qb-target']:AddEntityZone('TRPed'..TRClassicBlackMarketPed, TRClassicBlackMarketPed, {
-                name = 'TRPed'..TRClassicBlackMarketPed,
-                heading = GetEntityHeading(TRClassicBlackMarketPed),
-                debugPoly = false,
-            }, {
-                options = {
-                    {   
-                        icon = v.icon,
-                        label = v.label,
-                        event = v.event,
-                        canInteract = function(entity)
-                            if IsPedDeadOrDying(entity, true) or IsPedAPlayer(entity) or IsPedInAnyVehicle(PlayerPedId()) then return false end
-                            return true
-                        end,    
-                    },
-                },
-                distance = v.distance
-            })
-        end
-    end)
+if itemCheck then
+    exports['qb-target']:AddEntityZone('TRPed'..TRClassicBlackMarketPed, TRClassicBlackMarketPed, {
+        name = 'TRPed'..TRClassicBlackMarketPed,
+        heading = GetEntityHeading(TRClassicBlackMarketPed),
+        debugPoly = false,
+        item = Config.Item,
+    }, {
+        options = {
+            {   
+                icon = Config.Icons["Eyeicon"],
+                label = Config.Text["TargetLabel"],
+                event = "tr-blackmarket:OpenShop",
+                canInteract = function(entity)
+                    if IsPedDeadOrDying(entity, true) or IsPedAPlayer(entity) or IsPedInAnyVehicle(PlayerPedId(), false) then return false end
+                    return true
+                end,    
+            },
+        },
+        distance = 1.5
+    })
+else
+exports['qb-target']:AddTargetEntity(TRClassicBlackMarketPed, {
+    options = {
+        {
+            num = 1,
+            type = "client",
+            event = "tr-blackmarket:OpenShop",
+            label = Config.Text["TargetLabel"],
+            icon = Config.Icons["Eyeicon"]
+        }
+    },
+    distance = 1.5
+})
+end
+end
+end)
 -- End Target
 
 -- qb-menu 
